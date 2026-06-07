@@ -4,10 +4,15 @@ on:
   push:
     branches:
       - master
-      - main
-  workflow_dispatch: # Permite a execução manual
+      # - main # Comente ou remova esta linha se você usa a 'master' como principal
+  workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *' # Execução agendada rotineira (diária)
+    - cron: '0 2 * * *'
+
+# Bloqueia execuções paralelas para o mesmo push
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   cypress-run:
@@ -21,17 +26,16 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # Alterado de 18 para 20
+          node-version: 20
           cache: 'yarn'
 
       - name: Instalar Dependências
-        run: yarn install --frozen-lockfile # Garante a instalação consistente das dependências
+        run: yarn install --frozen-lockfile
 
       - name: Executar Bateria de Testes Cypress
-        run: yarn test:e2e:run # Executa os testes e2e mapeados via Yarn
-        continue-on-error: true # Garante a extração do relatório se algum teste falhar
+        run: yarn cypress run
+        continue-on-error: true
 
-      # Atendendo à exigência de armazenamento e publicação de relatórios na pipeline
       - name: Armazenar e Publicar Artefatos do Relatório
         uses: actions/upload-artifact@v4
         with:
@@ -39,4 +43,4 @@ jobs:
           path: |
             cypress/screenshots/
             cypress/videos/
-          retention-days: 5 # Define o tempo de retenção dos artefatos
+          retention-days: 5
