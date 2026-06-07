@@ -1,6 +1,5 @@
 name: 'CI - Pipeline de Testes Automatizados'
 
-# Gatilhos exigidos pelos critérios da tarefa
 on:
   push:
     branches:
@@ -23,13 +22,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
+          cache: 'yarn' # Ajustado para cachear as dependências do Yarn
 
       - name: Instalar Dependências
-        run: npm ci
+        run: yarn install --frozen-lockfile # Garante a instalação consistente das dependências
 
       - name: Executar Bateria de Testes Cypress
-        run: npm run test:e2e:run
+        run: yarn test:e2e:run # Executa os testes e2e mapeados via Yarn
         continue-on-error: true # Garante a extração do relatório se algum teste falhar
 
       # Atendendo à exigência de armazenamento e publicação de relatórios na pipeline
