@@ -21,8 +21,8 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: 'yarn' # Ajustado para cachear as dependências do Yarn
+          node-version: 20 # Alterado de 18 para 20
+          cache: 'yarn'
 
       - name: Instalar Dependências
         run: yarn install --frozen-lockfile # Garante a instalação consistente das dependências
