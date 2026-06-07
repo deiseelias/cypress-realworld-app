@@ -5,6 +5,22 @@
   <img alt="Cypress Real World App Logo" src="./src/svgs/rwa-logo.svg#gh-light-mode-only" />
 </p>
 
+---
+
+##  Configuração de Integração Contínua (CI)
+
+Como parte das atividades de conclusão da disciplina de **Integração Contínua e Testes Automatizados (PGATS-2026-03)**, este projeto foi configurado com um pipeline de CI utilizando **GitHub Actions**.
+
+**Detalhes da Implementação:**
+* **Automação:** Pipeline configurada para disparar automaticamente a cada *push* nas branches principais (`master`/`main`), garantindo a qualidade do código antes da integração.
+* **Ambiente de Testes:** Utilização de instâncias `ubuntu-latest` com Node.js v20.
+* **Gerenciamento de Dependências:** Instalação otimizada via `yarn install --frozen-lockfile`, garantindo reprodutibilidade entre ambientes.
+* **Execução de Testes:** Pipeline configurada para rodar a bateria completa de testes E2E com Cypress.
+* **Evidências:** Geração automática de artefatos (vídeos e screenshots) em caso de falhas, com retenção de 5 dias para análise técnica.
+* **Concorrência:** Configuração de `concurrency` para evitar execuções paralelas redundantes e otimizar recursos.
+
+---
+
 <p align="center">
   <a href="https://cypress.io">
     <img width="140" alt="Cypress Logo" src="./src/svgs/built-by-cypress.svg" />
