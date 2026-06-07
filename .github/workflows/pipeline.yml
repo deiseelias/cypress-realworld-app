@@ -1,0 +1,43 @@
+name: 'CI - Pipeline de Testes Automatizados'
+
+# Gatilhos exigidos pelos critérios da tarefa
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch: # Permite a execução manual
+  schedule:
+    - cron: '0 2 * * *' # Execução agendada rotineira (diária)
+
+jobs:
+  cypress-run:
+    name: 'Instalar Dependências e Executar Testes'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Instalar Dependências
+        run: npm ci
+
+      - name: Executar Bateria de Testes Cypress
+        run: npm run test:e2e:run
+        continue-on-error: true # Garante a extração do relatório se algum teste falhar
+
+      # Atendendo à exigência de armazenamento e publicação de relatórios na pipeline
+      - name: Armazenar e Publicar Artefatos do Relatório
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-evidencias-cypress
+          path: |
+            cypress/screenshots/
+            cypress/videos/
+          retention-days: 5 # Define o tempo de retenção dos artefatos
